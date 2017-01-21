@@ -47,8 +47,6 @@ class LyricsViewController: UIViewController {
         else{
             albumName.text = "Not known."
         }
-        
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,6 +54,7 @@ class LyricsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    //MARK: - Get lyrics with artist name and track name
     func loadLyrics(artistName:String, trackName:String){
         let urlString = ("http://lyrics.wikia.com/api.php?func=getSong&artist=\(artistName)&song=\(trackName)&fmt=json")
         let url: URL = URL(string: urlString)!
@@ -91,6 +90,7 @@ class LyricsViewController: UIViewController {
                     else {
                         let jsonStr = NSString(data: data! as Data, encoding: String.Encoding.utf8.rawValue)
                         print("Error could not parse JSON: \(jsonStr)")
+                        //not a valid json.. 
                     }
                 }
 
