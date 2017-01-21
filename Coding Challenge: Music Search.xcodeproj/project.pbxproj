@@ -15,6 +15,10 @@
 		3BF4FF8C1E32CD1400738B69 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BF4FF8A1E32CD1400738B69 /* LaunchScreen.storyboard */; };
 		3BF4FF971E32CD1400738B69 /* Coding_Challenge__Music_SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4FF961E32CD1400738B69 /* Coding_Challenge__Music_SearchTests.swift */; };
 		3BF4FFA21E32CD1400738B69 /* Coding_Challenge__Music_SearchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4FFA11E32CD1400738B69 /* Coding_Challenge__Music_SearchUITests.swift */; };
+		3BF4FFB11E32D1E600738B69 /* MusicCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4FFB01E32D1E600738B69 /* MusicCustomCell.swift */; };
+		3BF4FFB31E32E30200738B69 /* 1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3BF4FFB21E32E30200738B69 /* 1.txt */; };
+		3BF4FFB51E33451A00738B69 /* LyricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4FFB41E33451A00738B69 /* LyricsViewController.swift */; };
+		3BF4FFB81E334A9100738B69 /* ModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4FFB71E334A9100738B69 /* ModelController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		3BF4FF9D1E32CD1400738B69 /* Coding Challenge: Music SearchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Coding Challenge: Music SearchUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BF4FFA11E32CD1400738B69 /* Coding_Challenge__Music_SearchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coding_Challenge__Music_SearchUITests.swift; sourceTree = "<group>"; };
 		3BF4FFA31E32CD1400738B69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3BF4FFB01E32D1E600738B69 /* MusicCustomCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicCustomCell.swift; path = "Custom Cell/MusicCustomCell.swift"; sourceTree = "<group>"; };
+		3BF4FFB21E32E30200738B69 /* 1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1.txt; sourceTree = "<group>"; };
+		3BF4FFB41E33451A00738B69 /* LyricsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsViewController.swift; sourceTree = "<group>"; };
+		3BF4FFB71E334A9100738B69 /* ModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,8 +107,12 @@
 		3BF4FF7D1E32CD1300738B69 /* Coding Challenge: Music Search */ = {
 			isa = PBXGroup;
 			children = (
+				3BF4FFB61E334A7600738B69 /* ModelController */,
+				3BF4FFB21E32E30200738B69 /* 1.txt */,
+				3BF4FFAF1E32D1A400738B69 /* Custom Cell */,
 				3BF4FF7E1E32CD1300738B69 /* AppDelegate.swift */,
 				3BF4FF801E32CD1300738B69 /* ViewController.swift */,
+				3BF4FFB41E33451A00738B69 /* LyricsViewController.swift */,
 				3BF4FF821E32CD1300738B69 /* Main.storyboard */,
 				3BF4FF881E32CD1400738B69 /* Assets.xcassets */,
 				3BF4FF8A1E32CD1400738B69 /* LaunchScreen.storyboard */,
@@ -126,6 +138,22 @@
 				3BF4FFA31E32CD1400738B69 /* Info.plist */,
 			);
 			path = "Coding Challenge: Music SearchUITests";
+			sourceTree = "<group>";
+		};
+		3BF4FFAF1E32D1A400738B69 /* Custom Cell */ = {
+			isa = PBXGroup;
+			children = (
+				3BF4FFB01E32D1E600738B69 /* MusicCustomCell.swift */,
+			);
+			name = "Custom Cell";
+			sourceTree = "<group>";
+		};
+		3BF4FFB61E334A7600738B69 /* ModelController */ = {
+			isa = PBXGroup;
+			children = (
+				3BF4FFB71E334A9100738B69 /* ModelController.swift */,
+			);
+			name = ModelController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,6 +263,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BF4FFB31E32E30200738B69 /* 1.txt in Resources */,
 				3BF4FF8C1E32CD1400738B69 /* LaunchScreen.storyboard in Resources */,
 				3BF4FF891E32CD1400738B69 /* Assets.xcassets in Resources */,
 				3BF4FF841E32CD1300738B69 /* Main.storyboard in Resources */,
@@ -262,7 +291,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BF4FFB11E32D1E600738B69 /* MusicCustomCell.swift in Sources */,
+				3BF4FFB51E33451A00738B69 /* LyricsViewController.swift in Sources */,
 				3BF4FF871E32CD1400738B69 /* Coding_Challenge__Music_Search.xcdatamodeld in Sources */,
+				3BF4FFB81E334A9100738B69 /* ModelController.swift in Sources */,
 				3BF4FF811E32CD1300738B69 /* ViewController.swift in Sources */,
 				3BF4FF7F1E32CD1300738B69 /* AppDelegate.swift in Sources */,
 			);
