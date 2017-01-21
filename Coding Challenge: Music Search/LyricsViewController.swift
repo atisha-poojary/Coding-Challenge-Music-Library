@@ -20,26 +20,33 @@ class LyricsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        albumImage.imageFromUrl(urlString: self.musicDictionary["artworkUrl30"] as! String)
-        
-        let trackNameString: String
-        let artistNameString: String
+        if (self.musicDictionary["artworkUrl30"] as? String != ""){
+            albumImage.imageFromUrl(urlString: self.musicDictionary["artworkUrl30"] as! String)
+            }
+        else{
+            //set default image
+        }
         
         if (self.musicDictionary["trackName"] as? String != "") && (self.musicDictionary["artistName"] as? String != ""){
             trackName.text = self.musicDictionary["trackName"] as? String
-            trackNameString = (trackName.text)!.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
+            let trackNameString = (trackName.text)!.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
             
             artistName.text = self.musicDictionary["artistName"] as? String
-            artistNameString = (artistName.text)!.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
+            let artistNameString = (artistName.text)!.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
             
              self.loadLyrics(artistName: artistNameString,trackName: trackNameString)
+        }
+        else{
+            trackName.text = "Not known."
+            artistName.text = "Not known."
         }
         
         if (self.musicDictionary["collectionName"] as? String != ""){
             albumName.text = self.musicDictionary["collectionName"] as? String
         }
-        
-       
+        else{
+            albumName.text = "Not known."
+        }
         
         // Do any additional setup after loading the view.
     }
@@ -50,7 +57,7 @@ class LyricsViewController: UIViewController {
     }
     
     func loadLyrics(artistName:String, trackName:String){
-        let urlString = ("http://lyrics.wikia.com/api.php?func=getSong&artist=\(artistName)&song=\(trackName)&fmt=json.json")
+        let urlString = ("http://lyrics.wikia.com/api.php?func=getSong&artist=\(artistName)&song=\(trackName)&fmt=json")
         let url: URL = URL(string: urlString)!
         
         let request: NSMutableURLRequest = NSMutableURLRequest(url: url)
@@ -65,41 +72,28 @@ class LyricsViewController: UIViewController {
                 return
             }
             
-            print("Response: \(response)")
-            let strData = NSString(data: data!, encoding:String.Encoding.utf8.rawValue)
-            print("Body: \(strData)")
-            
             do {
                 let json = try JSONSerialization.jsonObject(with: data! as Data, options: .allowFragments)
-                
-                if let dict = json as? NSDictionary {
-                    
-                    print("dict:'\(dict)")
-                    
-                    if(error != nil) {
-                        print(error!.localizedDescription)
-                        let jsonStr = NSString(data: data! as Data, encoding: String.Encoding.utf8.rawValue)
-                        print("Error could not parse JSON: '\(jsonStr)'")
+                if(error != nil) {
+                    print(error!.localizedDescription)
+                }
+                else {
+                    if let dict = json as? NSDictionary {
+                        
+                        //                            song = {
+                        //                                'artist':'Tom Waits',
+                        //                                'song':'New Coat Of Paint',
+                        //                                'lyrics':'Let\'s put a new coat of paint on this lonesome old town\nSet \'em up, we\'ll be knockin\' em [...]',
+                        //                                'url':'http://lyrics.wikia.com/Tom_Waits:New_Coat_Of_Paint'
+                        //                            }
+                        
                     }
                     else {
-                        if let dict = json as? NSDictionary {
-                            let artist = dict["artist"]
-                            print("artist\(artist)")
-                            
-//                            song = {
-//                                'artist':'Tom Waits',
-//                                'song':'New Coat Of Paint',
-//                                'lyrics':'Let\'s put a new coat of paint on this lonesome old town\nSet \'em up, we\'ll be knockin\' em [...]',
-//                                'url':'http://lyrics.wikia.com/Tom_Waits:New_Coat_Of_Paint'
-//                            }
-                            
-                        }
-                        else {
-                            let jsonStr = NSString(data: data! as Data, encoding: String.Encoding.utf8.rawValue)
-                            print("Error could not parse JSON: \(jsonStr)")
-                        }
+                        let jsonStr = NSString(data: data! as Data, encoding: String.Encoding.utf8.rawValue)
+                        print("Error could not parse JSON: \(jsonStr)")
                     }
                 }
+
             } catch let error as NSError {
                 print("An error occurred: \(error)")
             }

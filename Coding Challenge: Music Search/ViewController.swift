@@ -29,7 +29,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -37,23 +36,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Dispose of any resources that can be recreated.
     }
     
-    func loadListOfMusic() {
-
-        let pathToFile = Bundle.main.url(forResource: "1", withExtension: "txt")
-        let data = NSData(contentsOf: pathToFile!)!
-        
-        do {
-            let json = try JSONSerialization.jsonObject(with: data as Data, options:.allowFragments)
-            if let dict = json as? NSDictionary {
-                self.musicDictionary = dict
-                tableView.reloadData()
-            }
-        }
-        catch let error as NSError {
-            print("An error occurred: \(error)")
-        }
-    }
-    
+    //MARK: - Search music using itunes url
+    //Starts search whhile typying, can change it and assign it to the search button after typying the search term
     func loadListOfMusic(searchText:String){
         let urlString = ("https://itunes.apple.com/search?term=\(searchText)")
         let url: URL = URL(string: urlString)!
@@ -70,31 +54,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 return
             }
             
-            print("Response: \(response)")
-            let strData = NSString(data: data!, encoding:String.Encoding.utf8.rawValue)
-            print("Body: \(strData)")
             do {
                 let json = try JSONSerialization.jsonObject(with: data! as Data, options:.allowFragments)
-                if let dict = json as? NSDictionary {
-                    
-                    print("dict:'\(dict)")
-                    
-                    if(error != nil) {
-                        print(error!.localizedDescription)
-                        let jsonStr = NSString(data: data! as Data, encoding: String.Encoding.utf8.rawValue)
-                        print("Error could not parse JSON: '\(jsonStr)'")
+                
+                if(error != nil) {
+                    print(error!.localizedDescription)
+                }
+                else {
+                    if let dict = json as? NSDictionary {
+                        self.musicDictionary = dict
+                        DispatchQueue.main.async{
+                            self.tableView.reloadData()
+                        }
                     }
                     else {
-                        if let dict = json as? NSDictionary {
-                            self.musicDictionary = dict
-                            DispatchQueue.main.async{
-                                self.tableView.reloadData()
-                            }
-                        }
-                        else {
-                            let jsonStr = NSString(data: data! as Data, encoding: String.Encoding.utf8.rawValue)
-                            print("Error could not parse JSON: \(jsonStr)")
-                        }
+                        let jsonStr = NSString(data: data! as Data, encoding: String.Encoding.utf8.rawValue)
+                        print("Error could not parse JSON: \(jsonStr)")
                     }
                 }
             } catch let error as NSError {
@@ -103,8 +78,32 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         task.resume()
     }
-
     
+    func updateSearchResults(for searchController: UISearchController) {
+        //self.filterContentForSearchText(searchText: searchController.searchBar.text!)
+        
+        //replacing occurence of space to +
+        let searchString = searchController.searchBar.text!.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
+        self.loadListOfMusic(searchText: searchString)
+    }
+
+    //MARK: - Search music already present the tableView
+    func loadListOfMusic() {
+        
+        let pathToFile = Bundle.main.url(forResource: "1", withExtension: "txt")
+        let data = NSData(contentsOf: pathToFile!)!
+        
+        do {
+            let json = try JSONSerialization.jsonObject(with: data as Data, options:.allowFragments)
+            if let dict = json as? NSDictionary {
+                self.musicDictionary = dict
+                tableView.reloadData()
+            }
+        }
+        catch let error as NSError {
+            print("An error occurred: \(error)")
+        }
+    }
     
     func filterContentForSearchText(searchText: String, scope: String = "All") {
         let searchPredicate = NSPredicate(format: "trackName contains %@", searchText)
@@ -113,13 +112,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         tableView.reloadData()
     }
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        //self.filterContentForSearchText(searchText: searchController.searchBar.text!)
-        let searchString = searchController.searchBar.text!.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
-        self.loadListOfMusic(searchText: searchString)
-    }
-
 
     //MARK: - Tableview Delegate & Datasource
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -150,7 +142,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.albumImage.imageFromUrl(urlString: (((self.musicDictionary["results"] as! NSArray).object(at: (indexPath as NSIndexPath).row) as AnyObject).object(forKey: "artworkUrl60") as? String)!)
         }
         else {
-            
+            //can set some default image
         }
         
         
@@ -159,7 +151,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.trackName.adjustsFontSizeToFitWidth = true
         }
         else {
-            cell.trackName.text = ""
+            cell.trackName.text = "Not known."
         }
         
         if (((self.musicDictionary["results"] as! NSArray).object(at: (indexPath as NSIndexPath).row) as AnyObject).object(forKey: "artistName") as? String) != "" {
@@ -167,7 +159,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.artistName.adjustsFontSizeToFitWidth = true
         }
         else {
-            cell.artistName.text = ""
+            cell.artistName.text = "Not known."
         }
         
         if (((self.musicDictionary["results"] as! NSArray).object(at: (indexPath as NSIndexPath).row) as AnyObject).object(forKey: "collectionName") as? String) != "" {
@@ -175,7 +167,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.albumName.adjustsFontSizeToFitWidth = true
         }
         else {
-            cell.albumName.text = ""
+            cell.albumName.text = "Not known."
         }
         
         return cell
