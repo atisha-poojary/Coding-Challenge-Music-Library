@@ -126,13 +126,21 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nmq-hN-Vcz">
-                                <rect key="frame" x="16" y="120" width="343" height="463"/>
+                            <textView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nmq-hN-Vcz">
+                                <rect key="frame" x="16" y="83" width="343" height="469"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outlet property="delegate" destination="FFx-Aq-2pa" id="8Ww-Nj-mYt"/>
+                                </connections>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t9F-6c-32a">
+                                <rect key="frame" x="16" y="571" width="343" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Click here for entire lyrics"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -141,6 +149,7 @@
                         <outlet property="albumImage" destination="gh4-fi-Bim" id="vgD-tV-7Oq"/>
                         <outlet property="albumName" destination="3IV-k8-VBg" id="NLo-bl-T0G"/>
                         <outlet property="artistName" destination="vYU-xR-neX" id="osn-a5-YJy"/>
+                        <outlet property="lyricsTextView" destination="nmq-hN-Vcz" id="a64-Bz-voX"/>
                         <outlet property="trackName" destination="6iP-O6-IOG" id="ryv-pZ-Egu"/>
                     </connections>
                 </viewController>

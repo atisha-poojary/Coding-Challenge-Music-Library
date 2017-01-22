@@ -14,6 +14,7 @@ class LyricsViewController: UIViewController {
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var artistName: UILabel!
     @IBOutlet weak var albumName: UILabel!
+    @IBOutlet weak var lyricsTextView: UITextView!
     var musicDictionary: NSDictionary!
     var songDictionary: NSDictionary!
     
@@ -70,22 +71,25 @@ class LyricsViewController: UIViewController {
             if error != nil {
                 return
             }
+
+            //coverted Data to String to replace "song = " with "" and "'" with "\"" to convert it to a valid format
+            var strData: String = NSString(data: data!, encoding:String.Encoding.utf8.rawValue) as! String
+            strData = strData.replacingOccurrences(of: "song = ", with: "")
+            strData = strData.replacingOccurrences(of: "'", with: "\"")
+            
+            //coverted string back to Data and pass it to JSONSerialization
+            let updatedData = strData.data(using: String.Encoding.utf8)!
             
             do {
-                let json = try JSONSerialization.jsonObject(with: data! as Data, options: .allowFragments)
+                let json = try JSONSerialization.jsonObject(with: updatedData as Data, options: .allowFragments)
                 if(error != nil) {
                     print(error!.localizedDescription)
                 }
                 else {
                     if let dict = json as? NSDictionary {
-                        
-                        //                            song = {
-                        //                                'artist':'Tom Waits',
-                        //                                'song':'New Coat Of Paint',
-                        //                                'lyrics':'Let\'s put a new coat of paint on this lonesome old town\nSet \'em up, we\'ll be knockin\' em [...]',
-                        //                                'url':'http://lyrics.wikia.com/Tom_Waits:New_Coat_Of_Paint'
-                        //                            }
-                        
+                        DispatchQueue.main.async{
+                            self.lyricsTextView.text = dict["lyrics"] as! String
+                        }                        
                     }
                     else {
                         let jsonStr = NSString(data: data! as Data, encoding: String.Encoding.utf8.rawValue)

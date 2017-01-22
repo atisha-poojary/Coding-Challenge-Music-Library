@@ -14,7 +14,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var musicDictionary: NSDictionary!
     var resultArray: NSArray = []
-    var filteredArray: NSArray = []
     
     var shouldShowSearchResults = false
     var searchController = UISearchController()
@@ -24,8 +23,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view, typically from a nib.
         
         searchController = UISearchController(searchResultsController: nil)
+        searchController.loadViewIfNeeded()
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchResultsUpdater = self
+        
         
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
@@ -34,6 +35,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    //MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        //self.filterContentForSearchText(searchText: searchController.searchBar.text!)
+        
+        //replacing occurence of space to +
+        let searchString = searchController.searchBar.text!.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
+        self.loadListOfMusic(searchText: searchString)
     }
     
     //MARK: - Search music using itunes url
@@ -78,14 +88,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         task.resume()
     }
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        //self.filterContentForSearchText(searchText: searchController.searchBar.text!)
-        
-        //replacing occurence of space to +
-        let searchString = searchController.searchBar.text!.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
-        self.loadListOfMusic(searchText: searchString)
-    }
 
     //MARK: - Search music already present the tableView
     func loadListOfMusic() {
@@ -97,7 +99,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let json = try JSONSerialization.jsonObject(with: data as Data, options:.allowFragments)
             if let dict = json as? NSDictionary {
                 self.musicDictionary = dict
-                tableView.reloadData()
+                DispatchQueue.main.async{
+                    self.tableView.reloadData()
+                }
             }
         }
         catch let error as NSError {
@@ -107,10 +111,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func filterContentForSearchText(searchText: String, scope: String = "All") {
         let searchPredicate = NSPredicate(format: "trackName contains %@", searchText)
-        filteredArray = (self.musicDictionary["results"] as! NSArray).filtered(using: searchPredicate) as NSArray
-        print("filteredArray \(filteredArray)")
+        resultArray = (self.musicDictionary["results"] as! NSArray).filtered(using: searchPredicate) as NSArray
+        print("resultArray \(resultArray)")
         
-        tableView.reloadData()
+        DispatchQueue.main.async{
+            self.tableView.reloadData()
+        }
     }
 
     //MARK: - Tableview Delegate & Datasource
@@ -124,7 +130,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
 //        if searchController.isActive && searchController.searchBar.text != "" {
-//            return filteredArray.count
+//            return resultArray.count
 //        }
 //        else {
 //            if (self.musicDictionary != nil){
@@ -138,7 +144,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let cell:MusicCustomCell = (self.tableView?.dequeueReusableCell(withIdentifier: "musicCustomCell") as! MusicCustomCell!)
         
-        if (((self.musicDictionary["results"] as! NSArray).object(at: (indexPath as NSIndexPath).row) as AnyObject).object(forKey: "artworkUrl100") as? String) != "" {
+        if (((self.musicDictionary["results"] as! NSArray).object(at: (indexPath as NSIndexPath).row) as AnyObject).object(forKey: "artworkUrl60") as? String) != "" {
             cell.albumImage.imageFromUrl(urlString: (((self.musicDictionary["results"] as! NSArray).object(at: (indexPath as NSIndexPath).row) as AnyObject).object(forKey: "artworkUrl60") as? String)!)
         }
         else {
