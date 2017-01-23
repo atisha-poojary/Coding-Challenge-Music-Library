@@ -76,10 +76,10 @@ class LyricsViewController: UIViewController {
             var strData: String = NSString(data: data!, encoding:String.Encoding.utf8.rawValue) as! String
             strData = strData.replacingOccurrences(of: "song = ", with: "")
             strData = strData.replacingOccurrences(of: "'", with: "\"")
+
             
             //coverted string back to Data and pass it to JSONSerialization
             let updatedData = strData.data(using: String.Encoding.utf8)!
-            
             do {
                 let json = try JSONSerialization.jsonObject(with: updatedData as Data, options: .allowFragments)
                 if(error != nil) {
